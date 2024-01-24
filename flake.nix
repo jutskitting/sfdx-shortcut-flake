@@ -8,11 +8,12 @@
     outputs = { self, nixpkgs, ... }: 
     let
         system = "x86_64-linux";
+
         pkgs = import nixpkgs {
             inherit system;
         };
-    in {
-        packages.${system}.default = pkgs.stdenv.mkDerivation {
+
+        force = pkgs.stdenv.mkDerivation {
             name = "force";
             src = ./salesforce_interface;
             phases = [ "installPhase" ];
@@ -22,5 +23,14 @@
                 chmod +x $out/bin/force
             '';
         };
+
+    in {
+        devShell = pkgs.mkShell{
+            buildinputs = with pkgs; [
+                force 
+            ];
+        };
+
+        packages.${system}.default = force;
     };
 }
