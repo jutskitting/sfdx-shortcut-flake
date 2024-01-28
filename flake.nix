@@ -1,36 +1,29 @@
 {
-    description = "A flake for holding some workflow shortcuts with sf client";
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+    naersk.url = "github:nix-community/naersk";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+  };
 
-    inputs = {
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    };
-
-    outputs = { self, nixpkgs, ... }: 
-    let
-        system = "x86_64-linux";
-
-        pkgs = import nixpkgs {
-            inherit system;
+  outputs = { self, flake-utils, naersk, nixpkgs }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = (import nixpkgs) {
+          inherit system;
         };
 
-        force = pkgs.stdenv.mkDerivation {
-            name = "force";
-            src = ./salesforce_interface;
-            phases = [ "installPhase" ];
-            installPhase = ''
-                mkdir -p $out/bin
-                cp $src $out/bin/force
-                chmod +x $out/bin/force
-            '';
+        naersk' = pkgs.callPackage naersk {};
+
+      in rec {
+        # For `nix build` & `nix run`:
+        defaultPackage = naersk'.buildPackage {
+          src = ./.;
         };
 
-    in {
-        devShell = pkgs.mkShell{
-            buildinputs = with pkgs; [
-                force 
-            ];
+        # For `nix develop`:
+        devShell = pkgs.mkShell {
+          nativeBuildInputs = with pkgs; [ rustc cargo ];
         };
-
-        packages.${system}.default = force;
-    };
+      }
+    );
 }
