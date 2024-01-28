@@ -12,17 +12,21 @@
           inherit system;
         };
 
-        naersk' = pkgs.callPackage naersk {};
+        force = pkgs.callPackage naersk {};
 
       in rec {
         # For `nix build` & `nix run`:
-        defaultPackage = naersk'.buildPackage {
+        defaultPackage = force.buildPackage {
           src = ./.;
         };
 
         # For `nix develop`:
         devShell = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ rustc cargo ];
+          nativeBuildInputs = with pkgs; [
+            rustc
+            cargo
+            (force.buildPackage { src = ./.; }) # Add your Rust package here
+          ];
         };
       }
     );

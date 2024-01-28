@@ -1,5 +1,5 @@
 [package]
-name = "salesforce_interface"
+name = "force"
 version = "0.1.0"
 edition = "2021"
 
