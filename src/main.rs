@@ -1,9 +1,6 @@
 mod common;
 mod functions;
-// mod retrieve;
-// mod curl;
-// mod info;
-// mod soql;
+
 use crate::functions::{
     auth::auth,
     open::open,
@@ -58,7 +55,7 @@ fn main() {
 
         match to_lower_case(&pattern).as_str() {
             "auth" =>{
-                auth(dir_string);
+                handle_response(auth(dir_string));
             }
             "open" =>{
                 open(dir_string); 
@@ -140,4 +137,15 @@ fn get_main_path(path : &String, segment: &str) -> String{
         }
     }
     result
+}
+
+fn handle_response(res:Result<std::process::ExitStatus, io::Error>){
+    match res {
+        Ok(status) => {
+            println!("status returned : {}",status);
+        },
+        Err(err) => {
+            println!("error occurred : {}",err);
+        }
+    }
 }
