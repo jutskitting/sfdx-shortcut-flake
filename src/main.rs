@@ -72,7 +72,7 @@ fn main() {
 
             }
             "test" =>{
-                test(&file_path);   
+                handle_response(test(&file_path));   
             }
             "ginit" =>{
                 println!("branch name: DevKH");
@@ -125,7 +125,7 @@ fn get_main_path(path : &String, segment: &str) -> String{
     result
 }
 
-fn handle_response(res:Result<std::process::ExitStatus, io::Error>){
+fn handle_response(res:Result<std::process::ExitStatus, anyhow::Error>){
     match res {
         Ok(status) => {
             println!("status returned : {}",status);

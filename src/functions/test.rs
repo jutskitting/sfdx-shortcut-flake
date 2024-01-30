@@ -2,18 +2,16 @@ use std::fs;
 use regex::Regex;
 use crate::common::*;
 
-fn class_name(directory : &String) -> Option<String> {
-    let content = fs::read_to_string(directory)
-        .expect("Could not read file");
+fn class_name(directory : &String) -> Result<String> {
+    let content = fs::read_to_string(directory)?;
 
     let re = Regex::new(r"(?si)@isTest(.*?)\{").unwrap();
     if let Some(caps) = re.captures(&content) {
-        return Some(parse_capture(&caps[1]));
+        return Ok(parse_capture(&caps[1]));
     } else {
-        println!("no match!");
+        return Err(anyhow!("Missing attribute: {}","ClassName"));
     }
 
-    return None;
 }
 
 fn parse_capture(capture : &str) -> String{
@@ -22,26 +20,11 @@ fn parse_capture(capture : &str) -> String{
     return  owned_capture.last().unwrap().to_string();
 }
 
-pub fn test(directory : &String){
+pub fn test(directory : &String) -> Result<ExitStatus,anyhow::Error>{
     
-    if let Some(class) =  class_name(directory) {
-
+    let class =  class_name(directory)?;
         let mut command = Command::new("npx")
             .args(["sf","apex","run","test","--result-format","human","--code-coverage","--synchronous","--class-names",&class])
-            .spawn()
-            .expect("Failed to execute command");
-
-        let output = command.wait().expect("Failed to wait on child");
-
-        if output.success() {
-            println!("Command executed successfully.");
-        } else {
-            eprintln!("Command failed to execute.");
-            if let Some(code) = output.code() {
-                eprintln!("Exit code: {}", code);
-            } else {
-                eprintln!("Command was terminated by a signal.");
-            }
-        }
-    }
+            .spawn()?;
+    Ok(command.wait()?)
 }

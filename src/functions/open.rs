@@ -1,8 +1,8 @@
 use crate::common::*;
 
-pub fn open() -> Result<ExitStatus, io::Error>{
+pub fn open() -> Result<ExitStatus,anyhow::Error>{
     let mut child = Command::new("npx")
         .args(["sf","org","open"])
         .spawn()?;
-    child.wait()
+    Ok(child.wait()?)
 }
