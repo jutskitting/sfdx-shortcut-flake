@@ -1,8 +1,8 @@
 use crate::common::*;
 
 pub fn deploy(_path : &String){
-   let mut command = Command::new("npx sf")
-        .args(["project","deploy","start","-c","-m","ApexClass","StaticResource","CustomObject","ApexComponent","ApexPage","CustomLabels","Flow","LightningComponentBundle"])
+   let mut command = Command::new("npx")
+        .args(["sf","project","deploy","start","-c","-m","ApexClass","StaticResource","CustomObject","ApexComponent","ApexPage","CustomLabels","Flow","LightningComponentBundle"])
         .env("PATH","~/Documents/SalesForce/Work")
         // .args(["project","deploy","start","--manifest",path])
         .spawn()

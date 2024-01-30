@@ -1,6 +1,5 @@
 use crate::common::*;
 
-
 pub fn auth(dir:&str) -> Result<ExitStatus, io::Error>{
 
     println!("working dir : {}",dir);

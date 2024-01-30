@@ -26,8 +26,8 @@ pub fn test(directory : &String){
     
     if let Some(class) =  class_name(directory) {
 
-        let mut command = Command::new("npx sf")
-            .args(["apex","run","test","--result-format","human","--code-coverage","--synchronous","--class-names",&class])
+        let mut command = Command::new("npx")
+            .args(["sf","apex","run","test","--result-format","human","--code-coverage","--synchronous","--class-names",&class])
             .spawn()
             .expect("Failed to execute command");
 
