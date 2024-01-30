@@ -55,10 +55,10 @@ fn main() {
 
         match to_lower_case(&pattern).as_str() {
             "auth" =>{
-                handle_response(auth(dir_string));
+                handle_response(auth());
             }
             "open" =>{
-                open(dir_string); 
+                handle_response(open()); 
             }
             "deploy" =>{
                 if has_file {
@@ -84,20 +84,6 @@ fn main() {
                 io::stdin().read_line(&mut project).expect("Failed to read line");
 
                 ginit(branch,project,false);
-            }
-            "ginit --debug" =>{
-                println!("debugging");
-                println!("branch name: DevKH");
-                let mut branch = String::new();
-                io::stdin().read_line(&mut branch).expect("Failed to read line");
-                println!("branch : {}",branch);
-
-                println!("sub project name : ss");
-                let mut project = String::new();
-                io::stdin().read_line(&mut project).expect("Failed to read line");
-                println!("project : {}",project);
-
-                ginit(branch,project,true);
             }
             "curl" =>{
 

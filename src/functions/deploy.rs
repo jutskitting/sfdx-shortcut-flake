@@ -21,5 +21,3 @@ pub fn deploy(_path : &String){
         }
     }
 }
-
-
