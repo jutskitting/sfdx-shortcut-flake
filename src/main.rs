@@ -72,7 +72,23 @@ fn main() {
 
             }
             "test" =>{
-                handle_response(test(&file_path));   
+                if has_file {
+                    handle_response(test(&file_path));   
+                }else{
+                    println!("no directory provided");
+                    println!("grep for directory locally?");
+                    let mut dialogue = String::new();
+                    io::stdin().read_line(&mut dialogue).expect("Failed to read line");
+                    dialogue = dialogue.trim().to_owned();
+                    match dialogue == "y".to_string() {
+                        true => {
+                            println!("this wont work");
+                            handle_response_null(grep_find(true,true));    
+                        }
+                        _ =>{ }
+                    }
+
+                }
             }
             "ginit" =>{
                 println!("branch name: DevKH");
@@ -92,7 +108,7 @@ fn main() {
 
             }
             "grep" =>{
-                grep_find();    
+                handle_response_null(grep_find(false,false));    
             }
             "exit" | "q" | "quit" =>{
                 break;
@@ -129,6 +145,16 @@ fn handle_response(res:Result<std::process::ExitStatus, anyhow::Error>){
     match res {
         Ok(status) => {
             println!("status returned : {}",status);
+        },
+        Err(err) => {
+            println!("error occurred : {}",err);
+        }
+    }
+}
+
+fn handle_response_null(res:Result<Option<String>, anyhow::Error>){
+    match res {
+        Ok(_) => {
         },
         Err(err) => {
             println!("error occurred : {}",err);

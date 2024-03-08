@@ -24,6 +24,9 @@ fn parse_project(str : &String) -> Option<String>{
         "cs"=>{
             return Some("Case-Split".to_string());
         }
+        "cm"=>{
+            return Some("Case-Merge-Premium".to_string());
+        }
         _=>{
             return None;
         }

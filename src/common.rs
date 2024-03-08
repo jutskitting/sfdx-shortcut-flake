@@ -1,7 +1,13 @@
-pub use std::io;
-pub use std::env;
-pub use std::process::Command;
-pub use std::process::ExitStatus;
+pub use std::{
+    io,
+    env,
+    fs,
+    path::PathBuf,
+    process::{
+        Command,
+        ExitStatus
+    }
+};
 pub use anyhow::{
     Result,
     anyhow
